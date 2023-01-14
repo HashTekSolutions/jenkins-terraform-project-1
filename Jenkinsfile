@@ -9,7 +9,7 @@ def tfCmd(String command, String options = '') {
 
 pipeline {
   agent any
-
+        tool name: 'terraform', type: 'terraform' 
 	environment {
 		AWS_DEFAULT_REGION = "${params.AWS_REGION}"
 		PROFILE = "${params.PROFILE}"

@@ -44,7 +44,7 @@ pipeline {
 		stage('Checkout & Environment Prep'){
 			steps {
 				script {
-					wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
+					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 						withCredentials([
 							[ $class: 'AmazonWebServicesCredentialsBinding',
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -86,7 +86,7 @@ pipeline {
 			steps {
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -120,7 +120,7 @@ pipeline {
 			steps {
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -167,7 +167,7 @@ pipeline {
 				}
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',

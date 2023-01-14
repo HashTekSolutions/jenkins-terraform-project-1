@@ -4,12 +4,12 @@ def tfCmd(String command, String options = '') {
 	sh ("cd $WORKSPACE/base && ${ACCESS} && terraform init") // base
 	sh ("cd $WORKSPACE/main && terraform workspace select ${ENV_NAME} || terraform workspace new ${ENV_NAME}")
 	sh ("echo ${command} ${options}") 
-        sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init && terraform ${command} ${options} && terraform show -no-color > show-${ENV_NAME}.txt")
+  sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init && terraform ${command} ${options} && terraform show -no-color > show-${ENV_NAME}.txt")
 }
 
 pipeline {
   agent any
-        tool name: 'terraform', type: 'terraform' 
+  
 	environment {
 		AWS_DEFAULT_REGION = "${params.AWS_REGION}"
 		PROFILE = "${params.PROFILE}"
@@ -35,7 +35,7 @@ pipeline {
 				description: 'Run terraform plan / apply / destroy')
 		string (name: 'PROFILE',
 			   defaultValue: 'devuser',
-			   description: 'Optional. Target aws profile defaults to tikal')
+			   description: 'Optional. Target aws profile defaults to devuser')
 		string (name: 'EMAIL',
 			   defaultValue: 'shasi008@gmail.com',
 			   description: 'Optional. Email notification')
@@ -44,7 +44,7 @@ pipeline {
 		stage('Checkout & Environment Prep'){
 			steps {
 				script {
-					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+					wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
 						withCredentials([
 							[ $class: 'AmazonWebServicesCredentialsBinding',
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -56,7 +56,7 @@ pipeline {
 								echo "Setting up Terraform"
 								def tfHome = tool name: 'terraform-2.12.07',
 									type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
-									env.PATH = "${tfHome}:${env.PATH}"
+                  env.PATH = "${tfHome}:${env.PATH}"
 									currentBuild.displayName += "[$AWS_REGION]::[$ACTION]"
 									sh("""
 										/usr/local/bin/aws configure --profile ${PROFILE} set aws_access_key_id ${AWS_ACCESS_KEY_ID}
@@ -86,7 +86,7 @@ pipeline {
 			steps {
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -120,7 +120,7 @@ pipeline {
 			steps {
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -167,7 +167,7 @@ pipeline {
 				}
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+						wrap([$class: 'SimpleBuildWrapper', colorMapName: 'xterm']) {
 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
@@ -187,7 +187,7 @@ pipeline {
 			}
 		}	
   	}
-  post
+  /*post
     {
 			always{
 			emailext (
@@ -208,5 +208,6 @@ pipeline {
 				attachLog: true
 				)
         }
-    }
+    }*/
+
 }

@@ -25,19 +25,19 @@ pipeline {
 	parameters {
 
 		choice (name: 'AWS_REGION',
-				choices: ['eu-central-1','us-west-1', 'us-west-2'],
+				choices: ['ap-south-1','us-west-1', 'us-west-2'],
 				description: 'Pick A regions defaults to eu-central-1')
 		string (name: 'ENV_NAME',
-			   defaultValue: 'tf-customer1',
+			   defaultValue: 'dev',
 			   description: 'Env or Customer name')
 		choice (name: 'ACTION',
 				choices: [ 'plan', 'apply', 'destroy'],
 				description: 'Run terraform plan / apply / destroy')
 		string (name: 'PROFILE',
-			   defaultValue: 'tikal',
+			   defaultValue: 'devuser',
 			   description: 'Optional. Target aws profile defaults to tikal')
 		string (name: 'EMAIL',
-			   defaultValue: 'natanb@tikalk.com',
+			   defaultValue: 'shasi008@gmail.com',
 			   description: 'Optional. Email notification')
     }
 	stages {
@@ -54,7 +54,7 @@ pipeline {
 							{
 							try {
 								echo "Setting up Terraform"
-								def tfHome = tool name: 'terraform-0.12.20',
+								def tfHome = tool name: 'terraform-2.12.07',
 									type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
 									env.PATH = "${tfHome}:${env.PATH}"
 									currentBuild.displayName += "[$AWS_REGION]::[$ACTION]"
